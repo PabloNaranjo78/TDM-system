@@ -51,20 +51,31 @@ void loop() {
     if (frequency >= 200 && magnitude > maxMagnitude) {
       maxMagnitude = magnitude;  // Actualizar la magnitud máxima
       peakFrequency = frequency;  // Actualizar la frecuencia del pico
-      vReal = 0;
     }
   }
 
+  double peakFrequency_2 = 0;
+  double maxMagnitude_2 = 0;
 
+  // Recorrer las frecuencias para encontrar la segunda frecuencia más alta
+  for (int i = 0; i < (SAMPLES / 2); i++) {
+    
+    double frequency_2 = (i * 1.0 * SAMPLING_FREQUENCY) / SAMPLES;  // Calcular frecuencia correspondiente
+    double magnitude_2 = vReal[i];
 
-  // Si no se encuentra ninguna frecuencia válida, establecer 0
-  if (peakFrequency < 230) {
-    peakFrequency = 0;  // Asignar 0 si la frecuencia máxima detectada es menor que 200 Hz
+    // Verificar si la frecuencia es mayor o igual a 200 Hz y es ± 50 Hz distante de la primera frecuencia encontrada
+    if (frequency_2 >= 200 && magnitude_2 > maxMagnitude_2 && (frequency_2 > (peakFrequency +50)) || frequency_2 < (peakFrequency -50) ) {
+      maxMagnitude_2 = magnitude_2;  // Actualizar la magnitud máxima
+      peakFrequency_2 = frequency_2;  // Actualizar la frecuencia del pico
+    }
   }
-
+//TO DO borrar las frecuencias alrededor de la encontrada en la lista 
   // Imprimir la frecuencia pico detectada
   Serial.print("Peak Frequency: ");
   Serial.println(peakFrequency);
+
+  Serial.print("Peak Frequency 2: ");
+  Serial.println(peakFrequency_2);
 
   delay(10); // Pausa para evitar saturar la salida del puerto serie
 }
